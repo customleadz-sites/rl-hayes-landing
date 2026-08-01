@@ -23,18 +23,21 @@ whose headline doesn't repeat the ad's promise — that's what kills conversion 
 
 ## ⚠️ Two things to do before spending money
 
-### 1. Google Ads conversion tracking (not live yet)
+### 1. Google Ads conversion tracking — call forwarding LIVE (July 2026)
 
-Every page has a gtag snippet with a placeholder ID, and `assets/js/main.js` has a
-`CONVERSIONS` object with placeholder labels. **Until these are replaced, nothing is
-being tracked and the campaign can't optimize.**
+The `<head>` of all four pages now carries GA4 (`G-RRHRE8E6Z5`), the Google Ads tag
+(`AW-16493269497`), and the **website-call phone snippet**
+(`AW-16493269497/hXI_CLeV69kcEPmjzbg9`, phone_conversion_number `(706) 955-2976`).
+Google swaps the visible number for a forwarding number on ad-click visits — every
+button was made number-only text for exactly this reason. Do NOT paste this same
+label into `CONVERSIONS.callClick` in main.js — the forwarding number already counts
+those calls; firing click events at the same label would double-count.
 
-- Replace `AW-XXXXXXXXXX` in the `<head>` of **all four** HTML files.
-- Replace the two values in `CONVERSIONS` at the top of `assets/js/main.js`.
-
-The call-click conversion fires automatically once those are in. Every phone link is
-tagged with `data-loc` (`header`, `hero`, `sticky-bar`, `final`, …) so you can see
-*which* button on the page is actually generating the calls.
+Still stubbed in `assets/js/main.js` (harmless no-ops until filled): the
+`CONVERSIONS.bookingComplete` label — create a Website conversion action in Google
+Ads for completed bookings and paste its AW-…/label in. Every phone link is tagged
+with `data-loc` (`header`, `hero`, `sticky-bar`, …) so GA4 shows which button
+generates the calls.
 
 ### 2. Booking conversions — now tracked via Zenbooker's official widget event
 

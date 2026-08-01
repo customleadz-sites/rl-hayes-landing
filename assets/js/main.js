@@ -13,15 +13,20 @@
    ========================================================================== */
 
 var CONVERSIONS = {
-  callClick:       'AW-XXXXXXXXXX/XXXXXXXXXXXXXXXXXX',   // <- replace
-  bookingStart:    'AW-XXXXXXXXXX/XXXXXXXXXXXXXXXXXX',   // <- replace
-  bookingComplete: 'AW-XXXXXXXXXX/XXXXXXXXXXXXXXXXXX'    // <- replace
+  /* callClick stays OFF on purpose: the phone snippet in the <head> tracks calls
+     via Google's forwarding number — firing click conversions too would
+     double-count. bookingStart likewise unused. */
+  callClick:       'AW-XXXXXXXXXX/XXXXXXXXXXXXXXXXXX',   // intentionally stubbed
+  bookingStart:    'AW-XXXXXXXXXX/XXXXXXXXXXXXXXXXXX',   // intentionally stubbed
+  bookingComplete: 'AW-16493269497/tJSOCNfC-dkcEPmjzbg9' // "Book appointment"
 };
 
-function fire(sendTo, label) {
+function fire(sendTo, label, extra) {
   if (sendTo.indexOf('XXXX') !== -1) return;           // not configured yet
   if (typeof gtag !== 'function') return;
-  gtag('event', 'conversion', { send_to: sendTo, event_label: label });
+  var payload = { send_to: sendTo, event_label: label };
+  if (extra) { for (var k in extra) payload[k] = extra[k]; }
+  gtag('event', 'conversion', payload);
 }
 
 (function () {
@@ -80,7 +85,7 @@ function fire(sendTo, label) {
   (function hookZenbooker() {
     if (window.Zenbooker && typeof window.Zenbooker.on === 'function') {
       window.Zenbooker.on('submission', function (ev) {
-        fire(CONVERSIONS.bookingComplete, page + ' | booking-complete');
+        fire(CONVERSIONS.bookingComplete, page + ' | booking-complete', { value: 1.0, currency: 'USD' });
         if (typeof gtag === 'function') {
           gtag('event', 'booking_completed', {
             page_variant: page,

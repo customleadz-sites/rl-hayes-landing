@@ -93,6 +93,23 @@ function fire(sendTo, label) {
     }
   })();
 
+  /* --- Sticky call bar: only after scrolling past the hero ---------------
+     The hero has its own call/book buttons, so the bar stays hidden while
+     any part of the hero is on screen and slides up once it's scrolled past.
+     Scrolling back to the hero hides it again. */
+  var callbar = document.querySelector('.callbar');
+  var heroSec = document.querySelector('.hero');
+  if (callbar && heroSec && 'IntersectionObserver' in window) {
+    var cbo = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        callbar.classList.toggle('show', !en.isIntersecting);
+      });
+    }, { threshold: 0 });
+    cbo.observe(heroSec);
+  } else if (callbar) {
+    callbar.classList.add('show');
+  }
+
   /* --- Scroll reveals ---------------------------------------------------- */
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var items = document.querySelectorAll('.reveal');

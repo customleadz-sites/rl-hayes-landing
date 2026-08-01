@@ -439,7 +439,12 @@ a.info-item:hover { color: #fff; }
   backdrop-filter: blur(8px);
   border-top: 1px solid rgba(255,255,255,.12);
   box-shadow: 0 -6px 24px rgba(0,0,0,.3);
+  /* Hidden while the hero (which has its own call/book buttons) is on screen;
+     main.js adds .show once the visitor scrolls past it. */
+  transform: translateY(110%);
+  transition: transform .35s ease;
 }
+.callbar.show { transform: translateY(0); }
 .callbar .btn { min-height: 52px; padding: 0 12px; font-size: 15.5px; box-shadow: none; }
 .callbar .btn:hover { transform: none; }
 .callbar .btn-book { background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.32); }
@@ -485,8 +490,7 @@ body { padding-bottom: 76px; }
   .brand-name { font-size: 18px; }
   .brand-sub { font-size: 8.5px; letter-spacing: .16em; margin-top: 4px; }
   .top-call { gap: 8px; }
-  .top-call .ico { width: 36px; height: 36px; }
-  .top-call .ico svg { width: 17px; height: 17px; }
+  .top-call .ico { display: none; }
   .top-call .num { font-size: 16px; }
   .top-call .lbl { display: none; }
   .hero h1 { font-size: clamp(1.8rem, 7.6vw, 2.4rem); }

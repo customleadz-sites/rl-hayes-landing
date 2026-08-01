@@ -56,6 +56,12 @@
   .badge-logo img { width: 76px; height: 76px; }
   .badge-logo { margin-bottom: 16px; }
   .hero .wrap { padding-block: 34px 30px; }
+
+  /* Mobile: stack the hero call/book buttons vertically */
+  @media (max-width: 520px) {
+    .hero-brand-copy .cta-row { flex-direction: column; align-items: center; gap: 9px; }
+    .hero-brand-copy .cta-row .btn { width: 100%; max-width: 300px; min-height: 48px; font-size: 15.5px; }
+  }
   @media (min-width: 700px) { .hero .wrap { padding-block: 46px 38px; } }
   @media (min-width: 950px) { .hero .wrap { padding-block: 54px 42px; } }
 </style>

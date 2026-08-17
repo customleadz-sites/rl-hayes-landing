@@ -93,8 +93,12 @@ function fire(sendTo, label, extra) {
           });
         }
       });
-    } else if (zbTries++ < 50) {
-      setTimeout(hookZenbooker, 200);
+    } else {
+      /* Keep trying for the life of the page — the old version gave up after
+         10 seconds, which on a slow mobile connection could mean the listener
+         was never attached at all (suspected cause of the untracked Aug 10
+         booking). Fast retries for the first 10s, then a patient 2s poll. */
+      setTimeout(hookZenbooker, zbTries++ < 50 ? 200 : 2000);
     }
   })();
 

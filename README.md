@@ -39,14 +39,31 @@ Ads for completed bookings and paste its AW-…/label in. Every phone link is ta
 with `data-loc` (`header`, `hero`, `sticky-bar`, …) so GA4 shows which button
 generates the calls.
 
-### 2. Booking conversions — now tracked via Zenbooker's official widget event
+### 2. Booking conversions — server-side webhook is PRIMARY (Aug 2026)
 
-Zenbooker's widget-events API (developers.zenbooker.com/docs/widget-events) fires a
-`submission` event on a real confirmed booking, and `main.js` listens for it via
-`Zenbooker.on("submission", …)` and fires the `bookingComplete` conversion. So create
-**three** conversion actions in Google Ads (call click, booking started, booking
-completed) and make "Booking Completed" the primary one. Nothing needs to be configured
-in the Zenbooker account for this. Weaker signals still tracked:
+**History:** the widget-event approach below MISSED a real paid booking on 2026-08-10
+(iPhone/Safari traffic — Zenbooker never delivered its client-side `submission` event,
+though our handler was proven correct by simulation). Client-side events are now the
+backup, not the source of truth.
+
+**Primary path — `api/zenbooker-webhook.js`:** Zenbooker webhook (`job.created`, set up
+in Zenbooker → Settings → Developers → Webhooks, URL carries a `?t=` secret matching the
+`ZENBOOKER_WEBHOOK_TOKEN` env var) → the function extracts `gclid`/`wbraid`/`gbraid`
+from `data.conversion_summary.landingpage` (Zenbooker stores the FULL landing URL,
+query string included — confirmed with the real Aug 10 payload) → uploads to Google Ads
+via the **Data Manager API** (`events:ingest`) into conversion action
+**"Zenbooker Booking (Import)"** (`7724671566`, UPLOAD_CLICKS type, primary).
+Dedupe: `transactionId` = Zenbooker job id. Env vars on the Vercel project:
+`GOOGLE_SERVICE_ACCOUNT`, `GOOGLE_ADS_SUBJECT`, `ZENBOOKER_WEBHOOK_TOKEN`. The
+service account needs the `https://www.googleapis.com/auth/datamanager` scope in
+Workspace domain-wide delegation (client 104871567057674313144). Note: the legacy
+Google Ads `uploadClickConversions` endpoint is CLOSED to new integrations
+(CUSTOMER_NOT_ALLOWLISTED) — Data Manager API is the only path.
+
+**Backup path (kept, demoted):** the old on-page tag "Book appointment" (`7704830295`)
+is now SECONDARY in Google Ads so the two paths never double-count one booking.
+`main.js`'s `hookZenbooker` no longer gives up after 10s (2s poll for page lifetime).
+Widget-event details, still true for the backup path:
 
 - `booking_viewed` fires when someone actually scrolls the booking section into view.
 - A `postMessage` listener fires `booking_interaction` if Zenbooker posts out of the iframe.

@@ -12,10 +12,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css?v=2">
-<link rel="preload" as="image" href="assets/img/hero-contractor.webp" fetchpriority="high">
+<link rel="preload" as="image" href="assets/img/hero-contractor.webp" imagesrcset="assets/img/hero-contractor-800.webp 800w, assets/img/hero-contractor.webp 1900w" imagesizes="100vw" fetchpriority="high">
 
 <!-- Zenbooker booking widget -->
-<link href="https://cdn.zenbooker.com/widget/latest/zenbooker.css" rel="stylesheet">
+<link href="https://cdn.zenbooker.com/widget/latest/zenbooker.css" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://cdn.zenbooker.com/widget/latest/zenbooker.css" rel="stylesheet"></noscript>
 
 <!-- Google tag (gtag.js) — GA4 installed. When the Google Ads call conversion is
      created, add its gtag('config','AW-…') line plus the phone snippet below. -->
@@ -81,7 +82,7 @@
 <!-- ===================== HERO ===================== -->
 <section class="hero">
   <div class="hero-media">
-    <img src="assets/img/hero-contractor.webp" alt="R.L. Hayes roofing trucks parked at an Augusta area home" width="1900" height="1069" fetchpriority="high">
+    <img src="assets/img/hero-contractor.webp" srcset="assets/img/hero-contractor-800.webp 800w, assets/img/hero-contractor.webp 1900w" sizes="100vw" alt="R.L. Hayes roofing trucks parked at an Augusta area home" width="1900" height="1069" fetchpriority="high">
   </div>
   <div class="wrap">
     <div class="hero-copy">

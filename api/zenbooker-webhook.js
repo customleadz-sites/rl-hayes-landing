@@ -128,6 +128,7 @@ module.exports = function (req, res) {
         events: [
           {
             eventTimestamp: new Date().toISOString(),
+            eventSource: 'WEB',
             // Zenbooker job id dedupes webhook retries into one conversion.
             transactionId: 'zb-' + (data.id || Date.now()),
             conversionValue: 1.0,
